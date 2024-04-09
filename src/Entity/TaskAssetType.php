@@ -21,6 +21,9 @@ class TaskAssetType
     #[ORM\OneToMany(targetEntity: TaskAsset::class, mappedBy: 'taskAssetType')]
     private Collection $taskAsset;
 
+    #[ORM\Column(length: 50)]
+    private ?string $type = null;
+
     public function __construct()
     {
         $this->taskAsset = new ArrayCollection();
@@ -57,6 +60,18 @@ class TaskAssetType
                 $taskAsset->setTaskAssetType(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }
