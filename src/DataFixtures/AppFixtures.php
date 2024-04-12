@@ -5,7 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Step;
 use App\Entity\Board;
 use App\Entity\Task;
-use App\Entity\History;
+use App\Entity\TaskHistory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -42,9 +42,10 @@ class AppFixtures extends Fixture
                     ->setStep($step);
                 $manager->persist($task);
 
-                $history = new History();
+                $history = new TaskHistory();
                 $history->setEvent($faker->sentence())
                     ->setEventDate($faker->dateTimeThisMonth())
+                    ->setCreatedAt($faker->dateTimeThisMonth())
                     ->setDetails($faker->sentence())
                     ->setTask($task);
                 $manager->persist($history);
