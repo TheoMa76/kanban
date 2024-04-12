@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Identity index{% endblock %}
+
+{% block body %}
+    <h1>Identity index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>FirstName</th>
+                <th>BirthDate</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for identity in identities %}
+            <tr>
+                <td>{{ identity.id }}</td>
+                <td>{{ identity.name }}</td>
+                <td>{{ identity.firstName }}</td>
+                <td>{{ identity.birthDate ? identity.birthDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ identity.email }}</td>
+                <td>{{ identity.phone }}</td>
+                <td>{{ identity.status }}</td>
+                <td>{{ identity.createdAt ? identity.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ identity.updatedAt ? identity.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_identity_show', {'id': identity.id}) }}">show</a>
+                    <a href="{{ path('app_identity_edit', {'id': identity.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_identity_new') }}">Create new</a>
+{% endblock %}
