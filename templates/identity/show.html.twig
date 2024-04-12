@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Identity{% endblock %}
+
+{% block body %}
+    <h1>Identity</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ identity.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ identity.name }}</td>
+            </tr>
+            <tr>
+                <th>FirstName</th>
+                <td>{{ identity.firstName }}</td>
+            </tr>
+            <tr>
+                <th>BirthDate</th>
+                <td>{{ identity.birthDate ? identity.birthDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ identity.email }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ identity.phone }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ identity.status }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ identity.createdAt ? identity.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ identity.updatedAt ? identity.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_identity_index') }}">back to list</a>
+
+    <a href="{{ path('app_identity_edit', {'id': identity.id}) }}">edit</a>
+
+    {{ include('identity/_delete_form.html.twig') }}
+{% endblock %}

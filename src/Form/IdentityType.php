@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Identity;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,9 +14,18 @@ class IdentityType extends AbstractType
         $builder
             ->add('name')
             ->add('firstName')
-            ->add('age')
+            ->add('birthDate', null, [
+                'widget' => 'single_text',
+            ])
             ->add('email')
-            ->add('telephone')
+            ->add('phone')
+            // ->add('status')
+            // ->add('createdAt', null, [
+            //     'widget' => 'single_text',
+            // ])
+            // ->add('updatedAt', null, [
+            //     'widget' => 'single_text',
+            // ])
         ;
     }
 

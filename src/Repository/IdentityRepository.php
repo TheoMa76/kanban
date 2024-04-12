@@ -21,20 +21,18 @@ class IdentityRepository extends ServiceEntityRepository
         parent::__construct($registry, Identity::class);
     }
 
-    //    /**
-    //     * @return Identity[] Returns an array of Identity objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('i')
-    //            ->andWhere('i.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('i.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+       /**
+        * @return Identity[] Returns an array of Identity objects
+        */
+       public function findByEmail($value): array
+       {
+           return $this->createQueryBuilder('i')
+               ->andWhere('i.email = :val')
+               ->setParameter('val', $value)
+               ->getQuery()
+               ->getOneOrNullResult()
+           ;
+       }
 
     //    public function findOneBySomeField($value): ?Identity
     //    {
