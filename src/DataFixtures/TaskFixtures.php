@@ -18,6 +18,7 @@ class TaskFixtures extends Fixture
         for ($i = 0; $i < 5; $i++) {
             $board = new Board();
             $board->setTitle($faker->sentence(3))
+                  ->setStatus($faker->randomElement(['todo', 'in_progress', 'done']))
                   ->setCreatedAt($faker->dateTimeThisMonth())
                   ->setUpdatedAt($faker->dateTimeThisMonth());
 
@@ -26,6 +27,7 @@ class TaskFixtures extends Fixture
             $step = new Step();
             $step->setTitle($faker->sentence())
                  ->setPosition($i)
+                 ->setStatus($faker->randomElement(['todo', 'in_progress', 'done']))
                  ->setCreatedAt($faker->dateTimeThisMonth())
                  ->setUpdatedAt($faker->dateTimeThisMonth());
 
