@@ -20,8 +20,14 @@ class History
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private \DateTimeInterface $event_date;
+
     #[ORM\Column(length: 255)]
     private ?string $details = null;
+
+    #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'histories')]
+    private $task;
 
     public function getId(): ?int
     {
@@ -60,6 +66,30 @@ class History
     public function setDetails(string $details): static
     {
         $this->details = $details;
+
+        return $this;
+    }
+
+    public function getEventDate(): ?\DateTimeInterface
+    {
+        return $this->event_date;
+    }
+
+    public function setEventDate(\DateTimeInterface $event_date): static
+    {
+        $this->event_date = $event_date;
+
+        return $this;
+    }
+
+    public function getTask(): ?Task
+    {
+        return $this->task;
+    }
+
+    public function setTask(?Task $task): static
+    {
+        $this->task = $task;
 
         return $this;
     }

@@ -23,6 +23,9 @@ class Board
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
+    #[ORM\OneToMany(mappedBy: 'board', targetEntity: Step::class)]
+    private $steps;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,13 @@ class Board
     public function setUpdatedAt(\DateTimeInterface $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function addStep(Step $step): static
+    {
+        $this->steps[] = $step;
 
         return $this;
     }

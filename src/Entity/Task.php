@@ -32,6 +32,9 @@ class Task
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
+    #[ORM\ManyToOne(targetEntity: Step::class, inversedBy: 'tasks')]
+    private $step;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +108,18 @@ class Task
     public function setUpdatedAt(\DateTimeInterface $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getStep(): ?Step
+    {
+        return $this->step;
+    }
+
+    public function setStep(?Step $step): static
+    {
+        $this->step = $step;
 
         return $this;
     }

@@ -28,7 +28,7 @@ class AppFixtures extends Fixture
             $board->setTitle($faker->sentence(3))
                 ->setCreatedAt($faker->dateTimeThisMonth())
                 ->setUpdatedAt($faker->dateTimeThisMonth())
-                ->addStep($step); 
+                ->addStep($step);
             $manager->persist($board);
 
             for ($j = 0; $j < 5; $j++) {
