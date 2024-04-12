@@ -9,11 +9,9 @@ use App\Entity\Board;
 use App\Entity\TaskHistory;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class TaskFixtures extends Fixture
 {
-
     /**
      * Seeder 
      *
@@ -21,32 +19,29 @@ class TaskFixtures extends Fixture
      */
     private Generator $faker;
 
-    private UserPasswordHasherInterface $passwordHasher;
-
-    public function __construct(UserPasswordHasherInterface $passwordHasher){
+    public function __construct()
+    {
         $this->faker = Factory::create("fr_FR");
-        $this->passwordHasher = $passwordHasher;
     }
 
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create();
 
         for ($i = 0; $i < 5; $i++) {
             $board = new Board();
-            $board->setTitle($faker->sentence(3))
-                  ->setStatus($faker->randomElement(['todo', 'in_progress', 'done']))
-                  ->setCreatedAt($faker->dateTimeThisMonth())
-                  ->setUpdatedAt($faker->dateTimeThisMonth());
+            $board->setTitle($this->faker->sentence(3))
+                  ->setStatus($this->faker->randomElement(['todo', 'in_progress', 'done']))
+                  ->setCreatedAt($this->faker->dateTimeThisMonth())
+                  ->setUpdatedAt($this->faker->dateTimeThisMonth());
 
             $manager->persist($board);
 
             $step = new Step();
-            $step->setTitle($faker->sentence())
+            $step->setTitle($this->faker->sentence())
                  ->setPosition($i)
-                 ->setStatus($faker->randomElement(['todo', 'in_progress', 'done']))
-                 ->setCreatedAt($faker->dateTimeThisMonth())
-                 ->setUpdatedAt($faker->dateTimeThisMonth());
+                 ->setStatus($this->faker->randomElement(['todo', 'in_progress', 'done']))
+                 ->setCreatedAt($this->faker->dateTimeThisMonth())
+                 ->setUpdatedAt($this->faker->dateTimeThisMonth());
 
             $manager->persist($step);
 
@@ -54,19 +49,19 @@ class TaskFixtures extends Fixture
 
             for ($j = 0; $j < 5; $j++) {
                 $task = new Task();
-                $task->setTitle($faker->sentence())
-                     ->setStatus($faker->randomElement(['todo', 'in_progress', 'done']))
-                     ->setCreatedAt($faker->dateTimeThisMonth())
-                     ->setUpdatedAt($faker->dateTimeThisMonth())
+                $task->setTitle($this->faker->sentence())
+                     ->setStatus($this->faker->randomElement(['todo', 'in_progress', 'done']))
+                     ->setCreatedAt($this->faker->dateTimeThisMonth())
+                     ->setUpdatedAt($this->faker->dateTimeThisMonth())
                      ->setStep($step);
 
 
                 $manager->persist($task);
 
                 $history = new TaskHistory();
-                $history->setEvent($faker->sentence())
-                        ->setEventDate($faker->dateTimeThisMonth())
-                        ->setCreatedAt($faker->dateTimeThisMonth())
+                $history->setEvent($this->faker->sentence())
+                        ->setEventDate($this->faker->dateTimeThisMonth())
+                        ->setCreatedAt($this->faker->dateTimeThisMonth())
                         ->setTask($task);
 
                 $manager->persist($history);
