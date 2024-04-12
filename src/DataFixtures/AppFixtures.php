@@ -34,8 +34,6 @@ class AppFixtures extends Fixture
             for ($j = 0; $j < 5; $j++) {
                 $task = new Task();
                 $task->setTitle($faker->sentence())
-                    ->setDescription($faker->paragraph())
-                    ->setPriority($faker->randomElement(['low', 'medium', 'high']))
                     ->setStatus($faker->randomElement(['1', '2', '3']))
                     ->setCreatedAt($faker->dateTimeThisMonth())
                     ->setUpdatedAt($faker->dateTimeThisMonth())
