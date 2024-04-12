@@ -22,5 +22,3 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
-bin/console
-bin/phpunit
