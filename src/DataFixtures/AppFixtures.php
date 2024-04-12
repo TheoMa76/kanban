@@ -21,13 +21,13 @@ class AppFixtures extends Fixture
             $step->setTitle($faker->sentence())
                 ->setPosition($i)
                 ->setCreatedAt($faker->dateTimeThisMonth())
-                ->setModifiedAt($faker->dateTimeThisMonth());
+                ->setUpdatedAt($faker->dateTimeThisMonth());
             $manager->persist($step);
 
             $board = new Board();
             $board->setTitle($faker->sentence(3))
                 ->setCreatedAt($faker->dateTimeThisMonth())
-                ->setModifiedAt($faker->dateTimeThisMonth())
+                ->setUpdatedAt($faker->dateTimeThisMonth())
                 ->addStep($step); 
             $manager->persist($board);
 
@@ -38,7 +38,7 @@ class AppFixtures extends Fixture
                     ->setPriority($faker->randomElement(['low', 'medium', 'high']))
                     ->setStatus($faker->randomElement(['1', '2', '3']))
                     ->setCreatedAt($faker->dateTimeThisMonth())
-                    ->setModifiedAt($faker->dateTimeThisMonth())
+                    ->setUpdatedAt($faker->dateTimeThisMonth())
                     ->setStep($step);
                 $manager->persist($task);
 
