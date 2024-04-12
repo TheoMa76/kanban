@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -31,6 +33,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, Team>
+     */
+    #[ORM\ManyToMany(targetEntity: Team::class, mappedBy: 'users')]
+    private Collection $teams;
+
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $identity = null;
+
+    public function __construct()
+    {
+        $this->teams = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,5 +121,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Team>
+     */
+    public function getTeams(): Collection
+    {
+        return $this->teams;
+    }
+
+    public function addTeam(Team $team): static
+    {
+        if (!$this->teams->contains($team)) {
+            $this->teams->add($team);
+            $team->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): static
+    {
+        if ($this->teams->removeElement($team)) {
+            $team->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    public function getIdentity(): ?self
+    {
+        return $this->identity;
+    }
+
+    public function setIdentity(?self $identity): static
+    {
+        $this->identity = $identity;
+
+        return $this;
     }
 }
