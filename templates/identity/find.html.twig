@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}C'est le identity !{% endblock %}
+
+{% block body %}
+<div>
+    <ul>
+    {% if identity is not null %}
+        <li><a href="/identity/find/{{ identity.id}}">{{identity.id}}</a>  {{ identity.name }}</li>
+        <li>{{ identity.firstName }}</li>
+        <li>{{ identity.createdAt|date('d/m/Y') }}</li>
+        {% if identity.updatedAt is not null %}
+            <li>{{ identity.updatedAt|date('d/m/Y') }}</li>
+        {% endif %}
+    {% else %}
+        <li>Il n'y a pas de identity avec cet id.</li>
+    {% endif %}
+    </ul>
+</div>
+{% endblock %}
