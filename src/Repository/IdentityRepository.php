@@ -24,7 +24,7 @@ class IdentityRepository extends ServiceEntityRepository
        /**
         * @return Identity[] Returns an array of Identity objects
         */
-       public function findByEmail($value): array
+       public function findByEmail($value): ?string
        {
            return $this->createQueryBuilder('i')
                ->andWhere('i.email = :val')
