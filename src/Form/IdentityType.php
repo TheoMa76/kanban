@@ -18,7 +18,6 @@ class IdentityType extends AbstractType
             ->add('age')
             ->add('email')
             ->add('telephone')
-            ->add('save', SubmitType::class)
         ;
     }
 

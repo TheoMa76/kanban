@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Uid\Uuid;
 
 class RegistrationController extends AbstractController
 {
@@ -17,9 +18,11 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
+        $uid = Uuid::v4();
+        $user->setUuid($uid);
+
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
@@ -28,7 +31,10 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
+            $user->getIdentity()->setStatus("on")->setCreatedAt(new \DateTime())
+                ->setUpdatedAt(new \DateTime());
+            $user->setStatus("on")->setCreatedAt(new \DateTime())
+                ->setUpdatedAt(new \DateTime());
             $entityManager->persist($user);
             $entityManager->flush();
 

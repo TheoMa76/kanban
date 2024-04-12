@@ -20,14 +20,14 @@ class Identity
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
-    #[ORM\Column]
-    private ?int $age = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $birthDate = null;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $telephone = null;
+    private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
@@ -67,14 +67,14 @@ class Identity
         return $this;
     }
 
-    public function getAge(): ?int
+    public function getBirthDate(): ?\DateTimeInterface
     {
-        return $this->age;
+        return $this->birthDate;
     }
 
-    public function setAge(int $age): static
+    public function setBirthDate(\DateTimeInterface $birthDate): static
     {
-        $this->age = $age;
+        $this->birthDate = $birthDate;
 
         return $this;
     }
@@ -91,14 +91,14 @@ class Identity
         return $this;
     }
 
-    public function getTelephone(): ?string
+    public function getPhone(): ?string
     {
-        return $this->telephone;
+        return $this->phone;
     }
 
-    public function setTelephone(string $telephone): static
+    public function setPhone(string $phone): static
     {
-        $this->telephone = $telephone;
+        $this->phone = $phone;
 
         return $this;
     }

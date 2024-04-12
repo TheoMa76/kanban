@@ -8,7 +8,7 @@
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.uuid) }}
+        {{ form_row(registrationForm.identity)}}
         {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}

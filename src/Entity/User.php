@@ -5,8 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -45,22 +44,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Team::class, mappedBy: 'users')]
     private Collection $teams;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
-    private ?self $identity = null;
+    #[ORM\OneToOne(targetEntity: Identity::class, cascade: ['persist', 'remove'])]
+    private ?Identity $identity = null;
 
-    public function __construct()
-    {
-        $this->teams = new ArrayCollection();
-    }
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
 
-    /**
-     * @var Collection<int, Team>
-     */
-    #[ORM\ManyToMany(targetEntity: Team::class, mappedBy: 'users')]
-    private Collection $teams;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
-    private ?self $identity = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -169,14 +163,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getIdentity(): ?self
+    public function getIdentity(): ?Identity
     {
         return $this->identity;
     }
 
-    public function setIdentity(?self $identity): static
+    public function setIdentity(?Identity $identity): static
     {
         $this->identity = $identity;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
