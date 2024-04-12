@@ -22,4 +22,3 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
-.env
