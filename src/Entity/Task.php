@@ -17,12 +17,6 @@ class Task
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 500)]
-    private ?string $description = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $priority = null;
-
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 

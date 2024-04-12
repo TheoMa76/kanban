@@ -17,6 +17,9 @@ class History
     #[ORM\Column(length: 255)]
     private ?string $event = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
