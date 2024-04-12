@@ -1,16 +1,33 @@
 <?php
 namespace App\DataFixtures;
 
-use App\Entity\Step;
-use App\Entity\Board;
-use App\Entity\Task;
-use App\Entity\TaskHistory;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use App\Entity\Step;
+use App\Entity\Task;
+use Faker\Generator;
+use App\Entity\Board;
+use App\Entity\TaskHistory;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class TaskFixtures extends Fixture
 {
+
+    /**
+     * Seeder 
+     *
+     * @var Generator
+     */
+    private Generator $faker;
+
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher){
+        $this->faker = Factory::create("fr_FR");
+        $this->passwordHasher = $passwordHasher;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
