@@ -50,7 +50,6 @@ class TaskFixtures extends Fixture
                 $history->setEvent($faker->sentence())
                         ->setEventDate($faker->dateTimeThisMonth())
                         ->setCreatedAt($faker->dateTimeThisMonth())
-                        ->setDetails($faker->sentence())
                         ->setTask($task);
 
                 $manager->persist($history);

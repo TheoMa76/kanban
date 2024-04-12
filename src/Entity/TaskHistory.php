@@ -23,9 +23,6 @@ class TaskHistory
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private \DateTimeInterface $event_date;
 
-    #[ORM\Column(length: 255)]
-    private ?string $details = null;
-
     #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'histories')]
     private $task;
 
@@ -54,18 +51,6 @@ class TaskHistory
     public function setCreatedAt(\DateTimeInterface $created_at): static
     {
         $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getDetails(): ?string
-    {
-        return $this->details;
-    }
-
-    public function setDetails(string $details): static
-    {
-        $this->details = $details;
 
         return $this;
     }
