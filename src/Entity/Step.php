@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StepRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,17 @@ class Step
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
+
+    /**
+     * @var Collection<int, Board>
+     */
+    #[ORM\OneToMany(targetEntity: Board::class, mappedBy: 'step')]
+    private Collection $board_id;
+
+    public function __construct()
+    {
+        $this->board_id = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
