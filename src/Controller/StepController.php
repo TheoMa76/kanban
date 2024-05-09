@@ -30,6 +30,7 @@ class StepController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $step->setCreatedAt(new \DateTime())->setUpdatedAt(new \DateTime())->setStatus("on");
             $entityManager->persist($step);
             $entityManager->flush();
 

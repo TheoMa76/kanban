@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +30,23 @@ class Task
 
     #[ORM\ManyToOne(targetEntity: Step::class, inversedBy: 'tasks')]
     private $step;
+
+    #[ORM\Column(length: 500, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column]
+    private ?int $priority = null;
+
+    /**
+     * @var Collection<int, ListOfTodo>
+     */
+    #[ORM\OneToMany(targetEntity: ListOfTodo::class, mappedBy: 'tasks')]
+    private Collection $listOfTodos;
+
+    public function __construct()
+    {
+        $this->listOfTodos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +109,60 @@ class Task
     public function setStep(?Step $step): static
     {
         $this->step = $step;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getPriority(): ?int
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(int $priority): static
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ListOfTodo>
+     */
+    public function getListOfTodos(): Collection
+    {
+        return $this->listOfTodos;
+    }
+
+    public function addListOfTodo(ListOfTodo $listOfTodo): static
+    {
+        if (!$this->listOfTodos->contains($listOfTodo)) {
+            $this->listOfTodos->add($listOfTodo);
+            $listOfTodo->setTasks($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListOfTodo(ListOfTodo $listOfTodo): static
+    {
+        if ($this->listOfTodos->removeElement($listOfTodo)) {
+            // set the owning side to null (unless already changed)
+            if ($listOfTodo->getTasks() === $this) {
+                $listOfTodo->setTasks(null);
+            }
+        }
 
         return $this;
     }

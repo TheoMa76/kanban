@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ListOfTodo index{% endblock %}
+
+{% block body %}
+    <h1>ListOfTodo index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>State</th>
+                <th>Created_at</th>
+                <th>Updated_at</th>
+                <th>Status</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for list_of_todo in list_of_todos %}
+            <tr>
+                <td>{{ list_of_todo.id }}</td>
+                <td>{{ list_of_todo.title }}</td>
+                <td>{{ list_of_todo.description }}</td>
+                <td>{{ list_of_todo.state ? 'Yes' : 'No' }}</td>
+                <td>{{ list_of_todo.createdAt ? list_of_todo.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ list_of_todo.updatedAt ? list_of_todo.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ list_of_todo.status }}</td>
+                <td>
+                    <a href="{{ path('app_list_of_todo_show', {'id': list_of_todo.id}) }}">show</a>
+                    <a href="{{ path('app_list_of_todo_edit', {'id': list_of_todo.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_list_of_todo_new') }}">Create new</a>
+{% endblock %}

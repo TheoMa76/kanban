@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ListOfTodo{% endblock %}
+
+{% block body %}
+    <h1>ListOfTodo</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ list_of_todo.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ list_of_todo.title }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ list_of_todo.description }}</td>
+            </tr>
+            <tr>
+                <th>State</th>
+                <td>{{ list_of_todo.state ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Created_at</th>
+                <td>{{ list_of_todo.createdAt ? list_of_todo.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Updated_at</th>
+                <td>{{ list_of_todo.updatedAt ? list_of_todo.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ list_of_todo.status }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_list_of_todo_index') }}">back to list</a>
+
+    <a href="{{ path('app_list_of_todo_edit', {'id': list_of_todo.id}) }}">edit</a>
+
+    {{ include('list_of_todo/_delete_form.html.twig') }}
+{% endblock %}

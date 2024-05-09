@@ -15,13 +15,13 @@ class TaskType extends AbstractType
             ->add('title')
             ->add('description')
             ->add('priority')
-            ->add('status')
-            ->add('created_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updated_at', null, [
-                'widget' => 'single_text',
-            ])
+            // ->add('status')
+            // ->add('created_at', null, [
+            //     'widget' => 'single_text',
+            // ])
+            // ->add('updated_at', null, [
+            //     'widget' => 'single_text',
+            // ])
         ;
     }
 

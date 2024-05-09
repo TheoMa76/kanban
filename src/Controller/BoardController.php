@@ -30,6 +30,7 @@ class BoardController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $board->setCreatedAt(new \DateTime())->setUpdatedAt(new \DateTime())->setStatus("on");
             $entityManager->persist($board);
             $entityManager->flush();
 

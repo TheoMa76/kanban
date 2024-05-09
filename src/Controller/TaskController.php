@@ -30,6 +30,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $task->setCreatedAt(new \DateTime())->setUpdatedAt(new \DateTime())->setStatus("on");
             $entityManager->persist($task);
             $entityManager->flush();
 

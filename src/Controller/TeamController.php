@@ -30,6 +30,7 @@ class TeamController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $team->setCreatedAt(new \DateTime())->setUpdatedAt(new \DateTime())->setStatus("on");
             $entityManager->persist($team);
             $entityManager->flush();
 
