@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Step;
 use App\Entity\Task;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,6 +17,11 @@ class TaskType extends AbstractType
             ->add('title')
             ->add('description')
             ->add('priority')
+            ->add('step', EntityType::class, [
+                'class' => Step::class,
+                'choice_label' => 'id',
+                'multiple' => false,
+            ])
             // ->add('status')
             // ->add('created_at', null, [
             //     'widget' => 'single_text',

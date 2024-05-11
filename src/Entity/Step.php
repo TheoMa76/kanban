@@ -31,15 +31,18 @@ class Step
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
+    #[ORM\ManyToOne(inversedBy: 'steps')]
+    private ?Board $board = null;
+
     /**
-     * @var Collection<int, Board>
+     * @var Collection<int, Task>
      */
-    #[ORM\OneToMany(targetEntity: Board::class, mappedBy: 'step')]
-    private Collection $board_id;
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'step')]
+    private Collection $tasks;
 
     public function __construct()
     {
-        $this->board_id = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -103,6 +106,48 @@ class Step
     public function setUpdatedAt(\DateTimeInterface $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getBoard(): ?Board
+    {
+        return $this->board;
+    }
+
+    public function setBoard(?Board $board): static
+    {
+        $this->board = $board;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): static
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setStep($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): static
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getStep() === $this) {
+                $task->setStep(null);
+            }
+        }
 
         return $this;
     }

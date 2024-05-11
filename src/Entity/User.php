@@ -65,10 +65,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: UserHistory::class, mappedBy: 'entity')]
     private Collection $userHistories;
 
+    /**
+     * @var Collection<int, Board>
+     */
+    #[ORM\ManyToMany(targetEntity: Board::class, mappedBy: 'users')]
+    private Collection $boards;
+
     public function __construct()
     {
         $this->teams = new ArrayCollection();
         $this->userHistories = new ArrayCollection();
+        $this->boards = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -258,6 +265,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($userHistory->getEntity() === $this) {
                 $userHistory->setEntity(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Board>
+     */
+    public function getBoards(): Collection
+    {
+        return $this->boards;
+    }
+
+    public function addBoard(Board $board): static
+    {
+        if (!$this->boards->contains($board)) {
+            $this->boards->add($board);
+            $board->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBoard(Board $board): static
+    {
+        if ($this->boards->removeElement($board)) {
+            $board->removeUser($this);
         }
 
         return $this;

@@ -28,9 +28,6 @@ class Task
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-    #[ORM\ManyToOne(targetEntity: Step::class, inversedBy: 'tasks')]
-    private $step;
-
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $description = null;
 
@@ -42,6 +39,9 @@ class Task
      */
     #[ORM\OneToMany(targetEntity: ListOfTodo::class, mappedBy: 'tasks')]
     private Collection $listOfTodos;
+
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?Step $step = null;
 
     public function __construct()
     {
@@ -101,18 +101,6 @@ class Task
         return $this;
     }
 
-    public function getStep(): ?Step
-    {
-        return $this->step;
-    }
-
-    public function setStep(?Step $step): static
-    {
-        $this->step = $step;
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -163,6 +151,18 @@ class Task
                 $listOfTodo->setTasks(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStep(): ?Step
+    {
+        return $this->step;
+    }
+
+    public function setStep(?Step $step): static
+    {
+        $this->step = $step;
 
         return $this;
     }

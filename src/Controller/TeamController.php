@@ -7,6 +7,7 @@ use App\Form\TeamType;
 use App\Repository\TeamRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -50,6 +51,30 @@ class TeamController extends AbstractController
             'team' => $team,
         ]);
     }
+
+    #[Route('/team/{id}/ajax', name: 'app_team_show_ajax', methods: ['GET'])]
+        public function showAjax(Team $team): JsonResponse
+        {
+            $users = $team->getUsers();
+
+            $usersData = [];
+            foreach ($users as $user) {
+                $usersData[] = [
+                    'id' => $user->getId(),
+                    'username' => $user->getUsername(),
+                    'email' => $user->getIdentity()->getEmail(),
+                ];
+            }
+
+            return $this->json([
+                'id' => $team->getId(),
+                'name' => $team->getName(),
+                'status' => $team->getStatus(),
+                'createdAt' => $team->getCreatedAt()->format('Y-m-d H:i:s'),
+                'updatedAt' => $team->getUpdatedAt()->format('Y-m-d H:i:s'),
+                'usersData' => $usersData,
+            ]);
+        }
 
     #[Route('/{id}/edit', name: 'app_team_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Team $team, EntityManagerInterface $entityManager): Response

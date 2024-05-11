@@ -31,6 +31,7 @@ class BoardController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $board->setCreatedAt(new \DateTime())->setUpdatedAt(new \DateTime())->setStatus("on");
+            
             $entityManager->persist($board);
             $entityManager->flush();
 
@@ -46,8 +47,17 @@ class BoardController extends AbstractController
     #[Route('/{id}', name: 'app_board_show', methods: ['GET'])]
     public function show(Board $board): Response
     {
+        $steps = $board->getSteps();
+        $steps = $steps->toArray(); // Convertir la collection en tableau
+
+
+        usort($steps, function($a, $b) {
+            return $a->getPosition() - $b->getPosition();
+        });
+
         return $this->render('board/show.html.twig', [
             'board' => $board,
+            'steps' => $steps,
         ]);
     }
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BoardRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,8 +28,23 @@ class Board
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'board', targetEntity: Step::class)]
-    private $steps;
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'boards')]
+    private Collection $users;
+
+    /**
+     * @var Collection<int, Step>
+     */
+    #[ORM\OneToMany(targetEntity: Step::class, mappedBy: 'board')]
+    private Collection $steps;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+        $this->steps = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -82,9 +99,56 @@ class Board
         return $this;
     }
 
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Step>
+     */
+    public function getSteps(): Collection
+    {
+        return $this->steps;
+    }
+
     public function addStep(Step $step): static
     {
-        $this->steps[] = $step;
+        if (!$this->steps->contains($step)) {
+            $this->steps->add($step);
+            $step->setBoard($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStep(Step $step): static
+    {
+        if ($this->steps->removeElement($step)) {
+            // set the owning side to null (unless already changed)
+            if ($step->getBoard() === $this) {
+                $step->setBoard(null);
+            }
+        }
 
         return $this;
     }

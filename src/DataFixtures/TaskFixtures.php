@@ -2,7 +2,6 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
-use App\Entity\Step;
 use App\Entity\Task;
 use Faker\Generator;
 use App\Entity\Board;
@@ -36,14 +35,6 @@ class TaskFixtures extends Fixture
 
             $manager->persist($board);
 
-            $step = new Step();
-            $step->setTitle($this->faker->sentence())
-                 ->setPosition($i)
-                 ->setStatus($this->faker->randomElement(['todo', 'in_progress', 'done']))
-                 ->setCreatedAt($this->faker->dateTimeThisMonth())
-                 ->setUpdatedAt($this->faker->dateTimeThisMonth());
-
-            $manager->persist($step);
 
             
 
@@ -52,8 +43,7 @@ class TaskFixtures extends Fixture
                 $task->setTitle($this->faker->sentence())
                      ->setStatus($this->faker->randomElement(['todo', 'in_progress', 'done']))
                      ->setCreatedAt($this->faker->dateTimeThisMonth())
-                     ->setUpdatedAt($this->faker->dateTimeThisMonth())
-                     ->setStep($step);
+                     ->setUpdatedAt($this->faker->dateTimeThisMonth());
 
 
                 $manager->persist($task);

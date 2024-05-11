@@ -16,14 +16,6 @@
                 <td>{{ task.title }}</td>
             </tr>
             <tr>
-                <th>Description</th>
-                <td>{{ task.description }}</td>
-            </tr>
-            <tr>
-                <th>Priority</th>
-                <td>{{ task.priority }}</td>
-            </tr>
-            <tr>
                 <th>Status</th>
                 <td>{{ task.status }}</td>
             </tr>
@@ -34,6 +26,14 @@
             <tr>
                 <th>Updated_at</th>
                 <td>{{ task.updatedAt ? task.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ task.description }}</td>
+            </tr>
+            <tr>
+                <th>Priority</th>
+                <td>{{ task.priority }}</td>
             </tr>
         </tbody>
     </table>

@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord de {{ user.username }}{% endblock %}
+
+{% block body %}
+
+<div class="test">
+    <h1>Bonjour {{ user.username }}!</h1>
+
+    <div class="row" id="boards">
+        <div class="col-md-6">
+            <h2>Projets en cours</h2>
+            {% if boards is empty %}
+                <p>Vous n'avez pas de projets en cours.</p>
+            {% else %}
+                <ul>
+                    {% for board in boards %}
+                        <li>{{ board.title }}</li><a href="{{ path('app_board_show', {'id': board.id}) }}">Voir</a>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row" id="teams">
+        <div class="col-md-6">
+            <h2>Vos équipes</h2>
+            {% if teams is empty %}
+                <p>Vous n'avez pas d'équipes.</p>
+            {% else %}
+                <ul>
+                    {% for team in teams %}
+                        <li>
+                            {{ team.name }}
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-id="{{ team.id }}" data-bs-target="#teamModal">Voir</button>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="teamModal" tabindex="-1" aria-labelledby="teamModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="teamModalLabel">Détails de l'équipe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="teamDetails"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to load team details dynamically
+    $(document).ready(function() {
+        $('#teamModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var teamId = button.data('id');
+            var modal = $(this);
+            
+            // AJAX request to fetch team details
+            $.ajax({
+                url: '{{ path('app_team_show_ajax', {'id': "teamId"}) }}'.replace("teamId", teamId), // URL to fetch team details (AJAX route
+                type: 'GET',
+                data: { id: teamId },
+                success: function(response) {
+                    console.log(response);
+                    let teamDetailsHtml = '<table class="table">';
+                    teamDetailsHtml += '<tbody>';
+                    teamDetailsHtml += '<tr><th>Name</th><td>' + response.name + '</td></tr>';
+                    teamDetailsHtml += '<tr><th>CreatedAt</th><td>' + response.createdAt + '</td></tr>';
+                    teamDetailsHtml += '<tr><th>UpdatedAt</th><td>' + response.updatedAt + '</td></tr>';
+                    teamDetailsHtml += '<tr><th>Members</th><td><ul>';
+                    response.usersData.forEach(function(usersData) {
+                        teamDetailsHtml += '<li>' + usersData.username + '</li>';
+                    });
+                    teamDetailsHtml += '</tbody></table>';
+                    modal.find('#teamDetails').html(teamDetailsHtml);
+                },
+                error: function() {
+                    modal.find('#teamDetails').html('<p>Une erreur s\'est produite lors du chargement des détails de l\'équipe.</p>');
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}
