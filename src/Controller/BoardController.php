@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Board;
+use App\Entity\ListOfTodo;
+use App\Entity\Step;
+use App\Entity\Task;
 use App\Form\BoardType;
 use App\Repository\BoardRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -103,6 +106,123 @@ class BoardController extends AbstractController
         }
 
         return $this->json(['error' => 'Erreur lors de la mise à jour du titre'], Response::HTTP_BAD_REQUEST);
+    }
+
+    #[Route('/ajouter/ajouterunelist', name: 'app_board_ajouterunelist', methods: ['POST'])]
+    public function ajouterunelist(Request $request, EntityManagerInterface $entityManager): Response
+    {   
+        $requestData = $request->getContent();
+
+        parse_str($requestData, $requestDataArray);
+
+        $taskId = $requestDataArray['task_id'];
+        $title = $requestDataArray['title'];
+        $description = $requestDataArray['description'];
+
+        // Utiliser les données récupérées
+        $task = $entityManager->getRepository(Task::class)->find($taskId);
+        $lists = $task->getListOfTodos();
+
+        $listsLength = count($lists) + 1;
+
+        $list = new ListOfTodo();
+        $list->setTitle($title);
+        $list->setDescription($description);
+        $list->setState(0);
+        $list->setTasks($task);
+        $list->setCreatedAt(new \DateTime())->setUpdatedAt(new \DateTime())->setStatus("on");
+
+
+        $entityManager->persist($list);
+        $entityManager->flush();
+
+        return $this->json(['list-title' => $list->getTitle(),
+                            'list-description' => $list->getDescription(),
+                            'list-id' => $list->getId(),
+                            'list-task' => $list->getTasks()->getId()]);
+    }
+
+    #[Route('/ajouter/ajouterunetache', name: 'app_board_ajouterunetache', methods: ['POST'])]
+    public function ajouterunetache(Request $request, EntityManagerInterface $entityManager): Response
+    {   
+        $requestData = $request->getContent();
+
+        parse_str($requestData, $requestDataArray);
+
+        $stepId = $requestDataArray['step_id'];
+        $title = $requestDataArray['title'];
+        $description = $requestDataArray['description'];
+
+        // Utiliser les données récupérées
+        $step = $entityManager->getRepository(Step::class)->find($stepId);
+        $tasks = $step->getTasks();
+
+        $taskslength = count($tasks) + 1;
+
+        $task = new Task();
+        $task->setTitle($title);
+        $task->setDescription($description);
+        $task->setPriority($taskslength);
+        $task->setStep($step);
+        $task->setCreatedAt(new \DateTime())->setUpdatedAt(new \DateTime())->setStatus("on");
+
+
+        $entityManager->persist($task);
+        $entityManager->flush();
+
+        return $this->json(['task-title' => $task->getTitle(),
+                            'task-description' => $task->getDescription(),
+                            'task-id' => $task->getId(),
+                            'task-step' => $task->getStep()->getId()]);
+    }
+
+    #[Route('/ajouter/ajouterunestep', name: 'app_board_ajouterunestep', methods: ['POST'])]
+    public function ajouterunestep(Request $request, EntityManagerInterface $entityManager): Response
+    {   
+        $requestData = $request->getContent();
+        parse_str($requestData, $requestDataArray);
+
+        $boardId = $requestDataArray['board_id'];
+        $title = $requestDataArray['title'];
+
+        $steps = $entityManager->getRepository(Step::class)->findBy(['board' => $boardId]);
+        $board = $entityManager->getRepository(Board::class)->find($boardId);
+
+        $position = count($steps) + 1;
+
+        $step = new Step();
+        $step->setTitle($title);
+        $step->setBoard($board);
+        $step->setPosition($position);
+
+        $step->setCreatedAt(new \DateTime())->setUpdatedAt(new \DateTime())->setStatus("on");
+
+        $entityManager->persist($step);
+        $entityManager->flush();
+
+        return $this->json(['step-title' => $step->getTitle(),
+                            'step-position' => $step->getPosition()]);
+    }
+
+    #[Route('/move/movetask', name: 'app_board_movetask', methods: ['POST'])]
+    public function movetask(Request $request, EntityManagerInterface $entityManager): Response
+    {   
+        $requestData = $request->getContent();
+        parse_str($requestData, $requestDataArray);
+
+        $stepId = $requestDataArray['step'];
+        $taskId = $requestDataArray['movetask_id'];
+
+        $task = $entityManager->getRepository(Task::class)->find($taskId);
+        $step = $entityManager->getRepository(Step::class)->find($stepId);
+        $task->setStep($step);
+
+        $step->setUpdatedAt(new \DateTime());
+
+        $entityManager->persist($task);
+        $entityManager->flush();
+
+        return $this->json(['task-step' => $task->getStep()->getId()]);
     }
 
 }

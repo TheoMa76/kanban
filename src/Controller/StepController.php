@@ -79,26 +79,5 @@ class StepController extends AbstractController
 
         return $this->redirectToRoute('app_step_index', [], Response::HTTP_SEE_OTHER);
     }
-
-    #[Route('/ajouterunestep', name: 'app_step_ajouterunestep', methods: ['POST'])]
-    public function add(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $requestData = json_decode($request->getContent(), true);
-        
-        $steps = $entityManager->getRepository(Step::class)->findBy(['board' => $requestData['board']]);
-
-        $position = count($steps) + 1;
-
-        $step = new Step();
-        $step->setTitle($requestData['title']);
-        $step->setBoard($requestData['board']);
-        $step->setPosition($position);
-
-        $entityManager->persist($step);
-        $entityManager->flush();
-
-        return $this->json(['step-title' => $step->getTitle(),
-                            'step-position' => $step->getPosition()]);
-    }
     
 }

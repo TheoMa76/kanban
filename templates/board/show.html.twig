@@ -2,6 +2,12 @@
 
 {% block title %}Board{% endblock %}
 
+{% block includes %}
+{{ include('task/new.html.twig') }}
+
+{% endblock %}
+
+
 {% block body %}
 <div class="container-fluid">
     <div class="row">
@@ -24,6 +30,9 @@
                     <div class="card-body">
                         <ul class="list-group">
                             {% for task in step.tasks %}
+                            <button type="button" id="move-task-btn" class="btn btn-primary open-move-task-modal" data-step-id="{{step.id}}" data-task-id="{{task.id}}" data-bs-toggle="modal" data-bs-target="#moveTaskModal">
+                                        Déplacer la tache
+                                        </button>
                                 <li class="list-group-item">
                                     <h3 class="h6">{{ task.title }}</h3>
                                     <p>{{ task.description }}</p>
@@ -35,9 +44,15 @@
                                                 <p>{{ todo.description }}</p>
                                             </li>
                                         {% endfor %}
+                                        <button type="button" id="add-list-btn" class="btn btn-primary open-create-list-modal"  data-task-id="{{task.id}}" data-bs-toggle="modal" data-bs-target="#createListModal">
+                                        Ajouter une liste
+                                        </button>   
                                     </ul>
                                 </li>
                             {% endfor %}
+                            <button type="button" id="add-task-btn" class="btn btn-primary open-create-task-modal"  data-step-id="{{step.id}}" data-bs-toggle="modal" data-bs-target="#createTaskModal">
+                            Ajouter une tâche
+                            </button>                        
                         </ul>
                     </div>
                 </div>
@@ -45,47 +60,200 @@
         {% endfor %}
     </div>
      <div class="col-md-3">
-        <button id="add-step-btn" data-board-id="{{ board.id }}">Ajouter une étape</button>
+        <button type="button" id="add-step-btn" class="btn btn-primary open-create-step-modal"  data-board-id="{{board.id}}" data-bs-toggle="modal" data-bs-target="#createStepModal">
+            Ajouter une étape
+        </button>     
     </div>
 </div>
+
+ <div class="modal fade" id="createTaskModal" tabindex="-1" aria-labelledby="createTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createTaskModalLabel">Create New Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createTaskForm" action="{{ path('app_board_ajouterunetache') }}" method="POST">
+                        <input type="hidden" name="step_id" id="step_id" value="">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" required></textarea>
+                        </div>
+                        <button type="button" id="createTaskSubmit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <div class="modal fade" id="createListModal" tabindex="-1" aria-labelledby="createListModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createListModalLabel">Create New List</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createListForm" action="{{ path('app_board_ajouterunelist') }}" method="POST">
+                        <input type="hidden" name="task_id" id="task_id" value="">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" required></textarea>
+                        </div>
+                        <button type="button" id="createListSubmit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="modal fade" id="createStepModal" tabindex="-1" aria-labelledby="createStepModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createStepModalLabel">Create New Step</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createStepForm" action="{{ path('app_board_ajouterunestep') }}" method="POST">
+                        <input type="hidden" name="board_id" id="board_id" value="">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <button type="button" id="createStepSubmit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="moveTaskModal" tabindex="-1" aria-labelledby="moveTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="moveTaskModalLabel">Déplacement de la tache vers l'étape :</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="moveTaskForm" action="{{ path('app_board_movetask') }}" method="POST">
+                        <input type="hidden" name="movetask_id" id="movetask_id" value="">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Etape</label>
+                            <select class="form-select" id="step" name="step" required>
+                                {% for step in board.steps %}
+                                    <option value="{{ step.id }}">{{ step.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="button" id="moveTaskSubmit" class="btn btn-primary">Déplacer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <script>
 $(document).ready(function() {
-    $('#add-step-btn').click(function() {
-        var newStepTitle = prompt("Entrez le titre de la nouvelle étape :");
-        if (newStepTitle !== null && newStepTitle.trim() !== "") {
-            var boardId = $(this).data('board-id');
-            var url = '{{ path('app_step_ajouterunestep') }}';
-            var data = {
-                'title': newStepTitle,
-                'board': boardId,
-            };
+    $('.open-move-task-modal').click(function() {
+        var taskId = $(this).data('task-id');
+        console.log(taskId)
+        $('#movetask_id').val(taskId); // Mettre à jour la valeur de task_id dans le formulaire
+    });
+    $('#moveTaskSubmit').click(function() {
+        var formData = $('#moveTaskForm').serialize(); // Récupère les données du formulaire
+        console.log(formData)
 
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: data,
-                success: function(response) {
-                    var newStepHtml = `
-                        <div class="col-md-3">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h2 class="h5">${response['step-title']}</h2>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="list-group">
-                                        <!-- Peut-être ajouter des tâches ici si nécessaire -->
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    $('.row').append(newStepHtml);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Erreur lors de l\'ajout de l\'étape :', error);
-                }
-            });
-        }
+        $.ajax({
+            type: 'POST',
+            url: $('#moveTaskForm').attr('action'), // URL spécifiée dans l'attribut action du formulaire
+            data: formData,
+            success: function(response) {
+                // Traitez la réponse si nécessaire
+                console.log('Tâche déplacée avec succès');
+                // Fermez le modal si vous le souhaitez
+                $('#moveTaskModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+                console.error('Erreur lors du déplacement de la tâche :', error);
+            }
+        });
+    });
+    $('.open-create-list-modal').click(function() {
+        var taskId = $(this).data('task-id');
+        $('#task_id').val(taskId); // Mettre à jour la valeur de task_id dans le formulaire
+    });
+    $('#createListSubmit').click(function() {
+        var formData = $('#createListForm').serialize(); // Récupère les données du formulaire
+
+        $.ajax({
+            type: 'POST',
+            url: $('#createListForm').attr('action'), // URL spécifiée dans l'attribut action du formulaire
+            data: formData,
+            success: function(response) {
+                // Traitez la réponse si nécessaire
+                console.log('Liste créée avec succès');
+                // Fermez le modal si vous le souhaitez
+                $('#createListModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+                console.error('Erreur lors de la création de la liste :', error);
+            }
+        });
+    });
+    $('.open-create-step-modal').click(function() {
+        var boardId = $(this).data('board-id');
+        $('#board_id').val(boardId); // Mettre à jour la valeur de board_id dans le formulaire
+    });
+    $('#createStepSubmit').click(function() {
+        var formData = $('#createStepForm').serialize(); // Récupère les données du formulaire
+
+        $.ajax({
+            type: 'POST',
+            url: $('#createStepForm').attr('action'), // URL spécifiée dans l'attribut action du formulaire
+            data: formData,
+            success: function(response) {
+                // Traitez la réponse si nécessaire
+                console.log('Étape créée avec succès');
+                // Fermez le modal si vous le souhaitez
+                $('#createStepModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+                console.error('Erreur lors de la création de l\'étape :', error);
+            }
+        });
+    });
+    $('.open-create-task-modal').click(function() {
+        var stepId = $(this).data('step-id');
+        $('#step_id').val(stepId); // Mettre à jour la valeur de step_id dans le formulaire
+    });
+    $('#createTaskSubmit').click(function() {
+        var formData = $('#createTaskForm').serialize(); // Récupère les données du formulaire
+
+        $.ajax({
+            type: 'POST',
+            url: $('#createTaskForm').attr('action'), // URL spécifiée dans l'attribut action du formulaire
+            data: formData,
+            success: function(response) {
+                // Traitez la réponse si nécessaire
+                console.log('Tâche créée avec succès');
+                // Fermez le modal si vous le souhaitez
+                $('#createTaskModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+                console.error('Erreur lors de la création de la tâche :', error);
+            }
+        });
     });
     $('.todo-checkbox').click(function() {
         var todoId = $(this).data('todo-id');
