@@ -31,14 +31,14 @@ class Step
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'steps')]
-    private ?Board $board = null;
-
     /**
      * @var Collection<int, Task>
      */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'step')]
     private Collection $tasks;
+
+    #[ORM\ManyToOne(inversedBy: 'steps')]
+    private ?Board $board = null;
 
     public function __construct()
     {
@@ -110,18 +110,6 @@ class Step
         return $this;
     }
 
-    public function getBoard(): ?Board
-    {
-        return $this->board;
-    }
-
-    public function setBoard(?Board $board): static
-    {
-        $this->board = $board;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Task>
      */
@@ -148,6 +136,18 @@ class Step
                 $task->setStep(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBoard(): ?Board
+    {
+        return $this->board;
+    }
+
+    public function setBoard(?Board $board): static
+    {
+        $this->board = $board;
 
         return $this;
     }

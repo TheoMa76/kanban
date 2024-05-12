@@ -152,4 +152,5 @@ class Board
 
         return $this;
     }
+
 }
