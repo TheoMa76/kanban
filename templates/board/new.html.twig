@@ -2,10 +2,49 @@
 
 {% block title %}New Board{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles */
+        body {
+            background: linear-gradient(to right, #4B0082, #FF1493);
+            color: #fff;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            background-color: #FF69B4;
+            border-color: #FF69B4;
+            color: #fff;
+        }
+        .btn:hover {
+            background-color: #FF1493;
+            border-color: #FF1493;
+        }
+        .btn:active,
+        .btn:focus {
+            background-color: #DB7093;
+            border-color: #DB7093;
+            color: #fff;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     <h1>Create new Board</h1>
 
     {{ include('board/_form.html.twig') }}
 
-    <a href="{{ path('app_board_index') }}">back to list</a>
 {% endblock %}

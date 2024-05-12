@@ -7,13 +7,86 @@
 
 {% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles */
+        body {
+            background: linear-gradient(to right, #4B0082, #FF1493);
+            color: #fff;
+        }
+        .card {
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .list-group-item {
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+        .list-group-item:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        .list-group-item a {
+            color: #fff;
+            text-decoration: none; /* Supprimer le soulignement des liens */
+            transition: color 0.3s; /* Ajouter une transition de couleur */
+        }
+        .list-group-item a:hover {
+            color: #f0f0f0; /* Couleur légèrement plus claire lors du survol */
+        }
+        .modal-content {
+            background-color: #4B0082;
+            color: #fff;
+        }
+        .modal-header {
+            border-bottom: none;
+            color: #fff;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .close {
+            color: #fff;
+        }
+        .table th, .table td {
+            border-top: none;
+            color: #fff;
+        }
+        .jumbotron {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .jumbotron h1,
+        .jumbotron p {
+            color: #fff;
+        }
+        /* Boutons personnalisés */
+        .btn-primary {
+            background-color: #7b1fa2; /* Couleur primaire personnalisée */
+            border-color: #7b1fa2; /* Couleur de bordure primaire personnalisée */
+            color: #fff; /* Couleur du texte */
+        }
+        .btn-primary:hover {
+            background-color: #9c27b0; /* Couleur au survol */
+            border-color: #9c27b0; /* Couleur de bordure au survol */
+            color: #fff; /* Couleur du texte au survol */
+        }
+    </style>
+{% endblock %}
+
+
 
 {% block body %}
 <div class="container-fluid">
     <div class="row">
         <div class="col">
             <h1 class="display-4" id="board-title">{{ board.title }}</h1>
-            <button id="modify-title-btn">Modifier le titre</button>
+            <button id="modify-title-btn" class="btn btn-primary">Modifier le titre</button>
         </div>
         <div class="col-auto">
             {{ include('board/_delete_form.html.twig') }}
@@ -182,7 +255,7 @@ $(document).ready(function() {
                 // Traitez la réponse si nécessaire
                 console.log('Tâche déplacée avec succès');
                 // Fermez le modal si vous le souhaitez
-                $('#moveTaskModal').modal('hide');
+                location.reload();
             },
             error: function(xhr, status, error) {
                 console.error('Erreur lors du déplacement de la tâche :', error);
@@ -204,7 +277,7 @@ $(document).ready(function() {
                 // Traitez la réponse si nécessaire
                 console.log('Liste créée avec succès');
                 // Fermez le modal si vous le souhaitez
-                $('#createListModal').modal('hide');
+                location.reload();
             },
             error: function(xhr, status, error) {
                 console.error('Erreur lors de la création de la liste :', error);
@@ -226,7 +299,7 @@ $(document).ready(function() {
                 // Traitez la réponse si nécessaire
                 console.log('Étape créée avec succès');
                 // Fermez le modal si vous le souhaitez
-                $('#createStepModal').modal('hide');
+                location.reload();
             },
             error: function(xhr, status, error) {
                 console.error('Erreur lors de la création de l\'étape :', error);
@@ -247,8 +320,8 @@ $(document).ready(function() {
             success: function(response) {
                 // Traitez la réponse si nécessaire
                 console.log('Tâche créée avec succès');
-                // Fermez le modal si vous le souhaitez
-                $('#createTaskModal').modal('hide');
+                location.reload();
+
             },
             error: function(xhr, status, error) {
                 console.error('Erreur lors de la création de la tâche :', error);
