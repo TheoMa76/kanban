@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Board{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h1 class="display-4" id="board-title">{{ board.title }}</h1>
+            <button id="modify-title-btn">Modifier le titre</button>
+        </div>
+        <div class="col-auto">
+            {{ include('board/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+    <div class="row">
+        {% for step in board.steps %}
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="h5">{{ step.title }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for task in step.tasks %}
+                                <li class="list-group-item">
+                                    <h3 class="h6">{{ task.title }}</h3>
+                                    <p>{{ task.description }}</p>
+                                    <ul class="list-group">
+                                        {% for todo in task.listOfTodos %}
+                                            <li class="list-group-item">
+                                                <input type="checkbox" id="todo-{{ task.id }}-{{ todo.id }}" {% if todo.state %}checked{% endif %} class="todo-checkbox" data-todo-id="{{ todo.id }}">
+                                                <label for="todo-{{ task.id }}-{{ todo.id }}">{{ todo.title }}</label>
+                                                <p>{{ todo.description }}</p>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+     <div class="col-md-3">
+        <button id="add-step-btn" data-board-id="{{ board.id }}">Ajouter une étape</button>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+    $('#add-step-btn').click(function() {
+        var newStepTitle = prompt("Entrez le titre de la nouvelle étape :");
+        if (newStepTitle !== null && newStepTitle.trim() !== "") {
+            var boardId = $(this).data('board-id');
+            var url = '{{ path('app_step_ajouterunestep') }}';
+            var data = {
+                'title': newStepTitle,
+                'board': boardId,
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function(response) {
+                    var newStepHtml = `
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="h5">${response['step-title']}</h2>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        <!-- Peut-être ajouter des tâches ici si nécessaire -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    $('.row').append(newStepHtml);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erreur lors de l\'ajout de l\'étape :', error);
+                }
+            });
+        }
+    });
+    $('.todo-checkbox').click(function() {
+        var todoId = $(this).data('todo-id');
+        var isChecked = $(this).prop('checked');
+        var url = '{{ path('app_list_of_todo_update_state', {'id': "idTodo"}) }}'.replace("idTodo",todoId);
+        console.log(url)
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'is_checked': isChecked
+            },
+            success: function(response) {
+                console.log('État du todo mis à jour avec succès');
+            },
+            error: function(xhr, status, error) {
+                console.error('Erreur lors de la mise à jour de l\'état du todo :', error);
+            }
+        });
+    });
+
+
+    $('#modify-title-btn').click(function() {
+        var newTitle = prompt("Entrez le nouveau titre :");
+        if (newTitle !== null && newTitle.trim() !== "") {
+            var boardId = {{ board.id }};
+            var url = '{{ path('app_board_update_title', {'id': board.id}) }}';
+            var data = {
+                'title': newTitle
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function(response) {
+                    $('#board-title').text(response.title);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erreur lors de la modification du titre :', error);
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

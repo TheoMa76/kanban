@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kanban projet du mois{% endblock %}
+
+{% block body %}
+<div class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <div class="text-center">
+        <h1 class="mb-4">Kanban Theo Maerten</h1>
+        <h2 class="mb-4">Veuillez vous connecter ou vous enregistrer pour profiter du Kanban !</h2>
+        <div class="bouton">
+            <a href="{{ path('app_login') }}" class="btn btn-lg btn-gradient">Se connecter</a> 
+            <a href="{{ path('app_register') }}" class="btn btn-lg btn-gradient">S'enregistrer</a>
+        </div>
+    </div>
+</div>
+<style>
+    .btn-gradient {
+        border:solid 1px #4B0082;
+        background: linear-gradient(to bottom right, #4B0082, #FF1493); /* Dégradé de violet foncé à rose foncé */
+        transition: all 0.5s ease;
+        color: #D59DFF;
+    }
+    .btn-gradient:hover {
+        border: solid 1px white;
+        transform: scale(1.2);
+        color: white;
+    }
+</style>
+{% endblock %}
