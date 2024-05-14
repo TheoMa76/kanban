@@ -18,13 +18,21 @@
         .card {
             margin-bottom: 10px;
             background-color: rgba(255, 255, 255, 0.1);
+            position: relative;
         }
+        .delete-form {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+
         .list-group-item {
             cursor: pointer;
             background-color: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.1);
             color: #fff;
             transition: background-color 0.3s;
+            
         }
         .list-group-item:hover {
             background-color: rgba(255, 255, 255, 0.3);
@@ -94,14 +102,16 @@
 
     <div class="row">
         {% for step in board.steps %}
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="h5">{{ step.title }}</h2>
-                        {{ include('step/_delete_form.html.twig') }}
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="delete-form">
+                    {{ include('step/_delete_form.html.twig') }}
+                </div>
+                <div class="card-header">
+                    <h2 class="h5">{{ step.title }}</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
                             {% for task in step.tasks %}
                             <button type="button" id="move-task-btn" class="btn btn-primary open-move-task-modal" data-step-id="{{step.id}}" data-task-id="{{task.id}}" data-bs-toggle="modal" data-bs-target="#moveTaskModal">
                                         Déplacer la tache
@@ -109,11 +119,15 @@
                                 <li class="list-group-item">
                                     <h3 class="h6">{{ task.title }}</h3>
                                     <p>{{ task.description }}</p>
-                                    {{ include('task/_delete_form.html.twig') }}
+                                    <div class="delete-form">
+                                        {{ include('task/_delete_form.html.twig') }}
+                                    </div>
                                     <ul class="list-group">
                                         {% for list_of_todo in task.listOfTodos %}
                                             <li class="list-group-item">
-                                                {{ include('list_of_todo/_delete_form.html.twig') }}
+                                                <div class="delete-form">
+                                                    {{ include('list_of_todo/_delete_form.html.twig') }}
+                                                </div>
                                                 <input type="checkbox" id="todo-{{ task.id }}-{{ list_of_todo.id }}" {% if list_of_todo.state %}checked{% endif %} class="todo-checkbox" data-todo-id="{{ list_of_todo.id }}">
                                                 <label for="todo-{{ task.id }}-{{ list_of_todo.id }}">{{ list_of_todo.title }}</label>
                                                 <p>{{ list_of_todo.description }}</p>
