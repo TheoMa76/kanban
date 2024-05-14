@@ -73,12 +73,13 @@ class ListOfTodoController extends AbstractController
     #[Route('/{id}', name: 'app_list_of_todo_delete', methods: ['POST'])]
     public function delete(Request $request, ListOfTodo $listOfTodo, EntityManagerInterface $entityManager): Response
     {
+        $board_id = $listOfTodo->getTasks()->getStep()->getBoard()->getId();
         if ($this->isCsrfTokenValid('delete'.$listOfTodo->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->remove($listOfTodo);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_list_of_todo_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_board_show', ['id' => $board_id]);
     }
 
     #[Route('/update/state/{id}', name: 'app_list_of_todo_update_state', methods: ['POST'])]

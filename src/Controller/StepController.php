@@ -72,12 +72,14 @@ class StepController extends AbstractController
     #[Route('/{id}', name: 'app_step_delete', methods: ['POST'])]
     public function delete(Request $request, Step $step, EntityManagerInterface $entityManager): Response
     {
+        $board_id = $step->getBoard()->getId();
+
         if ($this->isCsrfTokenValid('delete'.$step->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->remove($step);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_step_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_board_show', ['id' => $board_id]);
     }
     
 }

@@ -65,16 +65,15 @@
         .jumbotron p {
             color: #fff;
         }
-        /* Boutons personnalisés */
         .btn-primary {
-            background-color: #7b1fa2; /* Couleur primaire personnalisée */
-            border-color: #7b1fa2; /* Couleur de bordure primaire personnalisée */
-            color: #fff; /* Couleur du texte */
+            background-color: #7b1fa2;
+            border-color: #7b1fa2;
+            color: #fff; 
         }
         .btn-primary:hover {
-            background-color: #9c27b0; /* Couleur au survol */
-            border-color: #9c27b0; /* Couleur de bordure au survol */
-            color: #fff; /* Couleur du texte au survol */
+            background-color: #9c27b0;
+            border-color: #9c27b0;
+            color: #fff;
         }
     </style>
 {% endblock %}
@@ -99,6 +98,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="h5">{{ step.title }}</h2>
+                        {{ include('step/_delete_form.html.twig') }}
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
@@ -109,12 +109,14 @@
                                 <li class="list-group-item">
                                     <h3 class="h6">{{ task.title }}</h3>
                                     <p>{{ task.description }}</p>
+                                    {{ include('task/_delete_form.html.twig') }}
                                     <ul class="list-group">
-                                        {% for todo in task.listOfTodos %}
+                                        {% for list_of_todo in task.listOfTodos %}
                                             <li class="list-group-item">
-                                                <input type="checkbox" id="todo-{{ task.id }}-{{ todo.id }}" {% if todo.state %}checked{% endif %} class="todo-checkbox" data-todo-id="{{ todo.id }}">
-                                                <label for="todo-{{ task.id }}-{{ todo.id }}">{{ todo.title }}</label>
-                                                <p>{{ todo.description }}</p>
+                                                {{ include('list_of_todo/_delete_form.html.twig') }}
+                                                <input type="checkbox" id="todo-{{ task.id }}-{{ list_of_todo.id }}" {% if list_of_todo.state %}checked{% endif %} class="todo-checkbox" data-todo-id="{{ list_of_todo.id }}">
+                                                <label for="todo-{{ task.id }}-{{ list_of_todo.id }}">{{ list_of_todo.title }}</label>
+                                                <p>{{ list_of_todo.description }}</p>
                                             </li>
                                         {% endfor %}
                                         <button type="button" id="add-list-btn" class="btn btn-primary open-create-list-modal"  data-task-id="{{task.id}}" data-bs-toggle="modal" data-bs-target="#createListModal">
@@ -241,20 +243,18 @@ $(document).ready(function() {
     $('.open-move-task-modal').click(function() {
         var taskId = $(this).data('task-id');
         console.log(taskId)
-        $('#movetask_id').val(taskId); // Mettre à jour la valeur de task_id dans le formulaire
+        $('#movetask_id').val(taskId);
     });
     $('#moveTaskSubmit').click(function() {
-        var formData = $('#moveTaskForm').serialize(); // Récupère les données du formulaire
+        var formData = $('#moveTaskForm').serialize();
         console.log(formData)
 
         $.ajax({
             type: 'POST',
-            url: $('#moveTaskForm').attr('action'), // URL spécifiée dans l'attribut action du formulaire
+            url: $('#moveTaskForm').attr('action'),
             data: formData,
             success: function(response) {
-                // Traitez la réponse si nécessaire
                 console.log('Tâche déplacée avec succès');
-                // Fermez le modal si vous le souhaitez
                 location.reload();
             },
             error: function(xhr, status, error) {
@@ -264,19 +264,17 @@ $(document).ready(function() {
     });
     $('.open-create-list-modal').click(function() {
         var taskId = $(this).data('task-id');
-        $('#task_id').val(taskId); // Mettre à jour la valeur de task_id dans le formulaire
+        $('#task_id').val(taskId);
     });
     $('#createListSubmit').click(function() {
-        var formData = $('#createListForm').serialize(); // Récupère les données du formulaire
+        var formData = $('#createListForm').serialize();
 
         $.ajax({
             type: 'POST',
-            url: $('#createListForm').attr('action'), // URL spécifiée dans l'attribut action du formulaire
+            url: $('#createListForm').attr('action'),
             data: formData,
             success: function(response) {
-                // Traitez la réponse si nécessaire
                 console.log('Liste créée avec succès');
-                // Fermez le modal si vous le souhaitez
                 location.reload();
             },
             error: function(xhr, status, error) {
