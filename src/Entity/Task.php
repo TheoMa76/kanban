@@ -37,7 +37,7 @@ class Task
     /**
      * @var Collection<int, ListOfTodo>
      */
-    #[ORM\OneToMany(targetEntity: ListOfTodo::class, mappedBy: 'tasks', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: ListOfTodo::class, mappedBy: 'tasks')]
     private Collection $listOfTodos;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
