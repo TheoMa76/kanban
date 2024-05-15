@@ -37,7 +37,7 @@ class Board
     /**
      * @var Collection<int, Step>
      */
-    #[ORM\OneToMany(targetEntity: Step::class, mappedBy: 'board')]
+    #[ORM\OneToMany(targetEntity: Step::class, mappedBy: 'board',cascade: ['persist', 'remove'])]
     private Collection $steps;
 
     public function __construct()

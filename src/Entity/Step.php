@@ -34,7 +34,7 @@ class Step
     /**
      * @var Collection<int, Task>
      */
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'step')]
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'step', cascade: ['persist', 'remove'])]
     private Collection $tasks;
 
     #[ORM\ManyToOne(inversedBy: 'steps')]
