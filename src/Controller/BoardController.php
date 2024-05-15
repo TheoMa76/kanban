@@ -40,7 +40,7 @@ class BoardController extends AbstractController
             $entityManager->persist($board);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_home_board');
+            return $this->redirectToRoute('app_home_board', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('board/new.html.twig', [
@@ -92,7 +92,7 @@ class BoardController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_board_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home_board', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/update-title', name: 'app_board_update_title', methods: ['POST'])]
