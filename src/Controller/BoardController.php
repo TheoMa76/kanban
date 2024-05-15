@@ -31,9 +31,11 @@ class BoardController extends AbstractController
         $board = new Board();
         $form = $this->createForm(BoardType::class, $board);
         $form->handleRequest($request);
+        $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $board->setCreatedAt(new \DateTime())->setUpdatedAt(new \DateTime())->setStatus("on");
+            $board->addUser($user);
             
             $entityManager->persist($board);
             $entityManager->flush();

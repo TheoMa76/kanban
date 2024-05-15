@@ -15,11 +15,6 @@ class BoardType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('users', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
             // ->add('created_at', null, [
             //     'widget' => 'single_text',
             // ])
